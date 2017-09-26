@@ -18,7 +18,6 @@ package org.reaktivity.specification.nukleus.streams;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.junit.rules.RuleChain.outerRule;
 
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.DisableOnDebug;
@@ -39,8 +38,8 @@ public class StreamsIT
 
     @Test
     @Specification({
-        "connection.established.unsecure/client",
-        "connection.established.unsecure/server"
+        "connection.established/client",
+        "connection.established/server"
     })
     @ScriptProperty("serverConnect \"nukleus://example/streams/source\"")
     public void shouldEstablishConnection() throws Exception
@@ -50,7 +49,6 @@ public class StreamsIT
         k3po.finish();
     }
 
-    @Ignore("Awaiting release of k3po-nukleus-ext with support for option nukleus:authorization")
     @Test
     @Specification({
         "multiple.connections.established/client",
@@ -64,14 +62,13 @@ public class StreamsIT
         k3po.finish();
     }
 
-    @Ignore("Awaiting release of k3po-nukleus-ext with support for option nukleus:authorization")
     @Test
     @Specification({
         "connection.established/client",
         "connection.established/server"
     })
     @ScriptProperty({"serverConnect \"nukleus://example/streams/source\"",
-                     "routeAuthorization [0x01 0x00 0xc0]"})
+                     "streamAuthorization [0x01 0x00 0xc0]"})
     public void shouldEstablishAuthorizedConnection() throws Exception
     {
         k3po.start();
@@ -79,7 +76,6 @@ public class StreamsIT
         k3po.finish();
     }
 
-    @Ignore("Awaiting release of k3po-nukleus-ext with support for option nukleus:authorization")
     @Test
     @Specification({
         "connection.refused.not.authorized/client",
