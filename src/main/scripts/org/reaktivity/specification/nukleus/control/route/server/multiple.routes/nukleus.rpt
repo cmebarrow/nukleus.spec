@@ -14,42 +14,42 @@
 # under the License.
 #
 
-property nukleiR00N ${nuklei:directory("target/nukleus-itests").controlCapacity(1024, 1024)}
+property nukleiR01N ${nuklei:directory("target/nukleus-itests").controlCapacity(1024, 1024)}
 
-property controlR00N ${nukleiR00N.controlNew("example")}
+property controlR01N ${nukleiR01N.controlNew("example")}
 
 connect "agrona://stream/bidirectional"
-        option agrona:reader ${agrona:manyToOneReader(controlR00N.nukleus)}
-        option agrona:writer ${agrona:broadcastTransmitter(controlR00N.controller)}
+        option agrona:reader ${agrona:manyToOneReader(controlR01N.nukleus)}
+        option agrona:writer ${agrona:broadcastTransmitter(controlR01N.controller)}
 
 connected
 
 read [0x00 0x00 0x00 0x01]
-read ([0..8]:correlationIdR00N)
+read ([0..8]:correlationIdR01N)
 read [0x00]
 read [0x06] "source"
 read [0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00]
 read [0x06] "target"
-read ([0..8]:serverConnectRefR00N)
+read ([0..8]:serverConnectRefR01N)
 read [0..8] # authorization
 
 write [0x40 0x00 0x00 0x01]
-write ${correlationIdR00N}
+write ${correlationIdR01N}
 write ${nuklei:newReferenceId()}
 write flush
 
 read [0x00 0x00 0x00 0x01]
-read ([0..8]:correlationIdR00N)
+read ([0..8]:correlationIdR01N)
 read [0x00]
 read [0x06] "source"
-read [0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00]
+read ([0..8]:serverAcceptRefR01N)
 read [0x06] "target"
-read ([0..8]:serverConnectRefR00N)
+read ([0..8]:serverConnectRefR01N)
 read [0..8] # authorization
 
 write [0x40 0x00 0x00 0x01]
-write ${correlationIdR00N}
-write ${nuklei:newReferenceId()}
+write ${correlationIdR01N}
+write ${serverAcceptRefR01N}
 write flush
 
 close

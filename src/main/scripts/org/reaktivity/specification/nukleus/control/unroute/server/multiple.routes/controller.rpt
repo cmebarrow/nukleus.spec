@@ -14,8 +14,10 @@
 # under the License.
 #
 
-property newServerAcceptRef ${nuklei:newReferenceId()} # external scope
-property newServerConnectRef ${nuklei:newReferenceId()} # external scope
+property newServerAcceptRef1 ${nuklei:newReferenceId()} # external scope
+property newServerAcceptRef2 ${nuklei:newReferenceId()} # external scope
+property newServerConnectRef1 ${nuklei:newReferenceId()} # external scope
+property newServerConnectRef2 ${nuklei:newReferenceId()} # external scope
 
 property nukleiUR00C ${nuklei:directory("target/nukleus-itests").controlCapacity(1024, 1024)}
 

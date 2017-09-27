@@ -1,4 +1,3 @@
-
 #
 # Copyright 2016-2017 The Reaktivity Project
 #
@@ -18,21 +17,21 @@
 property newServerConnectRef1 ${nuklei:newReferenceId()} # external scope
 property newServerConnectRef2 ${nuklei:newReferenceId()} # external scope
 
-property nukleiR00C ${nuklei:directory("target/nukleus-itests").controlCapacity(1024, 1024)}
+property nukleiR01C ${nuklei:directory("target/nukleus-itests").controlCapacity(1024, 1024)}
 
-property controlR00C ${nukleiR00C.control("example")}
+property controlR01C ${nukleiR01C.control("example")}
 
 property routeAuthorization1 [0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00]
-property routeAuthorization2 [0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00]
+property routeAuthorization2 [0x01 0x00 0x00 0x00 0x00 0x00 0x00 0x00]
 
 connect "agrona://stream/bidirectional"
-        option agrona:reader ${agrona:broadcastReceiver(controlR00C.controller)}
-        option agrona:writer ${agrona:manyToOneWriter(controlR00C.nukleus)}
+        option agrona:reader ${agrona:broadcastReceiver(controlR01C.controller)}
+        option agrona:writer ${agrona:manyToOneWriter(controlR01C.nukleus)}
 
 connected
 
 write [0x00 0x00 0x00 0x01]
-write ${controlR00C.nextCorrelationId()}
+write ${controlR01C.nextCorrelationId()}
 write [0x00]
 write [0x06] "source"
 write [0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00]
@@ -42,21 +41,21 @@ write ${routeAuthorization1}
 write flush
 
 read [0x40 0x00 0x00 0x01]
-read ${controlR00C.correlationId()}
+read ${controlR01C.correlationId()}
 read ([0..8]:newServerAcceptRef1)
 
 write [0x00 0x00 0x00 0x01]
-write ${controlR00C.nextCorrelationId()}
+write ${controlR01C.nextCorrelationId()}
 write [0x00]
 write [0x06] "source"
-write [0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00]
+write ${newServerAcceptRef1}
 write [0x06] "target"
 write ${newServerConnectRef2}
 write ${routeAuthorization2}
 write flush
 
 read [0x40 0x00 0x00 0x01]
-read ${controlR00C.correlationId()}
+read ${controlR01C.correlationId()}
 read ([0..8]:newServerAcceptRef2)
 
 read notify ROUTED_SERVER
